@@ -4,7 +4,7 @@ import moment from "moment";
 import PortfolioContainer from "./portfolio/portfolio-container"
 
 export default class App extends Component {
-  render() {
+    render() {
     return (
       <div className='app'>
         <h1>BrUch React Portfolio</h1>
