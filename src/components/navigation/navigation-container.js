@@ -5,8 +5,6 @@ export default class NavigationContainer extends Component {
         super();
     }
     
-
-
     render() {
     return (
         <div>
