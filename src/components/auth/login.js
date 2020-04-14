@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -37,19 +36,17 @@ export default class Login extends Component {
       )
       .then(response => {
         if (response.data.status === "created") {
-          this.props.handleSuccessfulAuth();
+          console.log("You can come in...");
         } else {
           this.setState({
             errorText: "Wrong email or password"
           });
-          this.props.handleUnsuccessfulAuth();
         }
       })
       .catch(error => {
         this.setState({
           errorText: "An error occurred"
         });
-        this.props.handleUnsuccessfulAuth();
       });
 
     event.preventDefault();
@@ -62,32 +59,26 @@ export default class Login extends Component {
 
         <div>{this.state.errorText}</div>
 
-        <form onSubmit={this.handleSubmit} className="auth-form-wrapper">
-          <div className="form-group">
-           <h4>image</h4>
-            <input
-              type="email"
-              name="email"
-              placeholder="Your email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </div>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Your email"
+            value={this.state.email}
+            onChange={this.handleChange}
+          />
 
-          <div className="form-group">
-            <h4>image</h4>    
-            <input
-              type="password"
-              name="password"
-              placeholder="Your password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-          </div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Your password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
 
-          <button className="btn" type="submit">
-            Login
-          </button>
+          <div>
+            <button type="submit">Login</button>
+          </div>
         </form>
       </div>
     );
