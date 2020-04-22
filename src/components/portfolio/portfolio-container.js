@@ -1,71 +1,77 @@
-import React, { Component } from "react";
+import React from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from "react-router";
+import { NavLink } from "react-router-dom";
 
-import PortfolioItem from "./portfolio-item";
-
-export default class PortfolioContainer extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      pageTitle: "Welcome to my portfolio",
-      isLoading: false,
-      data: []
-    };
-
-    this.handleFilter = this.handleFilter.bind(this);
-  }
-
-  handleFilter(filter) {
-    this.setState({
-      data: this.state.data.filter(item => {
-        return item.category === filter;
-      })
-    });
-  }
-
-  getPortfolioItems() {
-    axios
-      .get("https://bruch.devcamp.space/portfolio/portfolio_items")
-      .then(response => {
-        this.setState({
-          data: response.data.portfolio_items
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  portfolioItems() {
-    return this.state.data.map(item => {
-      return <PortfolioItem key={item.id} item={item} />;
-    });
-  }
-
-  componentDidMount() {
-    this.getPortfolioItems();
-  }
-
-  render() {
-    if (this.state.isLoading) {
-      return <div>Loading...</div>;
-    }
-
+const NavigationComponent = props => {
+  const dynamicLink = (route, linkText) => {
     return (
-      <div className="portfolio-items-wrapper">
-        <button className="btn" onClick={() => this.handleFilter("eCommerce")}>
-          eCommerce
-        </button>
-        <button className="btn" onClick={() => this.handleFilter("Scheduling")}>
-          Scheduling
-        </button>
-        <button className="btn" onClick={() => this.handleFilter("Enterprise")}>
-          Enterprise
-        </button>
-
-        {this.portfolioItems()}
+      <div className="nav-link-wrapper">
+        <NavLink to={route} activeClassName="nav-link-active">
+          {linkText}
+        </NavLink>
       </div>
     );
-  }
-}
+  };
+
+  const handleSignOut = () => {
+    axios
+      .delete("https://api.devcamp.space/logout", { withCredentials: true })
+      .then(response => {
+        if (response.status === 200) {
+          props.history.push("/");
+          props.handleSuccessfulLogout();
+        }
+        return response.data;
+      })
+      .catch(error => {
+        console.log("Error signing out", error);
+      });
+  };
+
+  return (
+    <div className="nav-wrapper">
+      <div className="left-side">
+        <div className="nav-link-wrapper">
+          <NavLink exact to="/" activeClassName="nav-link-active">
+            Home
+          </NavLink>
+        </div>
+
+        <div className="nav-link-wrapper">
+          <NavLink to="/about-me" activeClassName="nav-link-active">
+            About
+          </NavLink>
+        </div>
+
+        <div className="nav-link-wrapper">
+          <NavLink to="/contact" activeClassName="nav-link-active">
+            Contact
+          </NavLink>
+        </div>
+
+        <div className="nav-link-wrapper">
+          <NavLink to="/blog" activeClassName="nav-link-active">
+            Blog
+          </NavLink>
+        </div>
+
+        {props.loggedInStatus === "LOGGED_IN" ? (
+          dynamicLink("/portfolio-manager", "Portfolio Manager")
+        ) : null}
+      </div>
+
+      <div className="right-side">
+        DOUG DUTRA
+        {props.loggedInStatus === "LOGGED_IN" ? (
+          <a onClick={handleSignOut}>
+            <FontAwesomeIcon icon="sign-out-alt" />
+          </a>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+export default withRouter(NavigationComponent);
