@@ -22,6 +22,16 @@ class Blog extends Component {
     window.addEventListener("scroll", this.onScroll, false);
     this.handleNewBlogClick = this.handleNewBlogClick.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleSuccesfulNewBlogSubmission = this.handleSuccesfulNewBlogSubmission.bind(
+      this
+    );
+  }
+
+  handleSuccesfulNewBlogSubmission(blog) {
+    this.setState = {
+      blogModalIsOpen: false,
+      blogItems: [blog].concat(this.state.blogItems),
+    };
   }
 
   handleModalClose() {
@@ -65,7 +75,7 @@ class Blog extends Component {
         }
       )
       .then((response) => {
-        console.log("gettting", response.data);
+        console.log("getting", response.data);
         this.setState({
           blogItems: this.state.blogItems.concat(response.data.portfolio_blogs),
           totalCount: response.data.meta.total_records,
@@ -98,7 +108,9 @@ class Blog extends Component {
         />
 
         <div className="new-blog-link">
-          <a onClick={this.handleNewBlogClick}>Open Modal!</a>
+          <a onClick={this.handleNewBlogClick}>
+            <FontAwesomeIcon icon="plus-circle" />
+          </a>
         </div>
 
         <div className="content-container">{blogRecords}</div>
