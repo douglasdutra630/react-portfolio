@@ -70,7 +70,7 @@ export default class RichTextEditor extends Component {
               uploadCallback: this.uploadFile,
               alt: { present: true, mandatory: false },
               previewImage: true,
-              inputAccept: "image/gif,/img/jpeg,image/jpg,image/png,image/svg",
+              inputAccept: "image/gif,image/jpeg,image/jpg,image/png,image/svg",
             },
           }}
         />
